@@ -9,8 +9,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.patches import Circle
 
-from itertools import count
-
 
 # Workaround to matplotlib bug in FunctionAnimator that won't allow us
 # to specify ``itertools.count(step=delta)`` as the frames argument.
@@ -70,7 +68,6 @@ class Spring(object):
         axis_history.set_xlabel(r'$\mathrm{Time}$')
         axis_history.set_ylabel(r'$\mathrm{Position,\, u}$')
 
-
     def _spring_xy(self):
         return np.linspace(0, self.u, self.N), self._spring_coords
 
@@ -94,9 +91,23 @@ class Spring(object):
         self._history_plot.set_ydata(self._history)
 
 
-f, (ax0, ax1) = plt.subplots(2, 1)
-s = Spring(axis=ax0, axis_history=ax1,
-           k=1, m=0.5, gamma=0, F=0, u0=0, u0_prime=0.5)
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(
+        description='Illustration simple mechanical vibrations')
+    parser.add_argument('-o', '--output',
+                        help='Filename for output video.  Requires ffmpeg.')
+    args = parser.parse_args()
 
-ani = animation.FuncAnimation(f, s.set_time, interval=delta * 1000)
-plt.show()
+    f, (ax0, ax1) = plt.subplots(2, 1)
+    s = Spring(axis=ax0, axis_history=ax1,
+               k=1, m=0.5, gamma=0, F=0, u0=0, u0_prime=0.5)
+
+    anim = animation.FuncAnimation(f, s.set_time, interval=delta * 1000,
+                                  save_count=400)
+
+    if args.output:
+        print "Saving video output to %s (this may take a while)." % args.output
+        anim.save(args.output, fps=25)
+
+    plt.show()
