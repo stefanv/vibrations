@@ -35,7 +35,7 @@ class Spring(object):
     _spring_coords[30:70] = 0.05 * (-1) ** np.arange(40)
 
     def __init__(self, axis, axis_history, k, m, gamma, F, u0, u0_prime):
-        if gamma == 0 and F == 0:
+        if gamma == 0 or F == 0:
             self._method = FreeUndamped(k, m, u0, u0_prime)
         else:
             raise NotImplementedError()
