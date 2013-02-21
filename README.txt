@@ -15,7 +15,10 @@ This demo is inspired by a series of blog posts on John Cook's
 
     python ./vibrations.py
 
+To see all options:
+
+    python ./vibrations.py -h
+
 ## Saving as a video
 
     python ./vibrations.py -o vibrations.mp4
-

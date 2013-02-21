@@ -97,11 +97,21 @@ if __name__ == '__main__':
         description='Illustration simple mechanical vibrations')
     parser.add_argument('-o', '--output',
                         help='Filename for output video.  Requires ffmpeg.')
+    parser.add_argument('-m', '--mass', type=float, default=0.5)
+    parser.add_argument('-y', '--damping', type=float, default=0)
+    parser.add_argument('-k', '--spring', type=float, default=1)
+    parser.add_argument('-F', '--force', type=float, default=0)
+    parser.add_argument('--u0', type=float, default=0)
+    parser.add_argument('--u0_prime', type=float, default=0.5)
     args = parser.parse_args()
+
+    m, gamma, k, F, u0, u0_prime = (getattr(args, name) for name in
+                                    ('mass', 'damping', 'spring', 'force',
+                                     'u0', 'u0_prime'))
 
     f, (ax0, ax1) = plt.subplots(2, 1)
     s = Spring(axis=ax0, axis_history=ax1,
-               k=1, m=0.5, gamma=0, F=0, u0=0, u0_prime=0.5)
+               k=k, m=m, gamma=gamma, F=F, u0=u0, u0_prime=u0_prime)
 
     anim = animation.FuncAnimation(f, s.set_time, interval=delta * 1000,
                                   save_count=400)
